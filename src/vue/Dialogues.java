@@ -1,5 +1,6 @@
 package vue;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -26,14 +27,17 @@ public class Dialogues {
 		alert.showAndWait();
 		return alert.getResult().equals(ButtonType.OK);
 	}
-	public static Zulu loadConfig() {
+	public static File getReleaseFile() {
 		FileChooser fileChooser = new FileChooser();
 	    fileChooser.setTitle("Ouvrir un fichier de version");
 	    fileChooser.getExtensionFilters().addAll(
 	    		new ExtensionFilter("Fichier release","release"),
 	    		new ExtensionFilter("Tous les fichiers","*"));
+	    return fileChooser.showOpenDialog(null);
+	}
+	public static Zulu loadConfig() {
 		Checker check = new Checker();
-		Zulu current = check.getCurrentVersion(fileChooser.showOpenDialog(null));
+		Zulu current = check.getCurrentZulu(getReleaseFile());
 		return current;
 	}
 	public static Alert erreur(Exception exception) {
@@ -60,6 +64,13 @@ public class Dialogues {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("A propos");
 		alert.setContentText("Cette application a été écrite en java avec la bibliothèque javaFX et l'api d'Azul");
+		return alert;
+	}
+	public static Alert Redemarrer() {
+		// TODO Auto-generated method stub
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Redemarrage de l'application");
+		alert.setContentText("Afin de prendre en compte votre modification, l'application doit redemarrer");
 		return alert;
 	}
 }

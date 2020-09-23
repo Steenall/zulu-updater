@@ -15,11 +15,10 @@ import java.util.Scanner;
 import vue.Dialogues;
 
 public class Checker {
-	private File zuluAPI;
 	public Checker() {
 		
 	}
-	public Zulu getCurrentVersion(File fichier) {
+	public Zulu getCurrentZulu(File fichier) {
 		Scanner sc=null;
 		Zulu current=null;
 		try {
@@ -101,7 +100,7 @@ public class Checker {
 					e.printStackTrace();
 				}
 		Scanner sc=null;
-		zuluAPI=new File("version.json");
+		File zuluAPI=new File("version.json");
 		try {
 			sc = new Scanner(zuluAPI);
 		} catch (FileNotFoundException e) {
@@ -139,36 +138,6 @@ public class Checker {
 				}
 			}
 		}
-		/*if(zuluAPI!=null) {
-			boolean end=false;
-			Scanner sc;
-			try {
-				sc = new Scanner(zuluAPI);
-				sc.useDelimiter(",");
-				String line = "";
-				while(!end){
-					line = sc.next().toLowerCase().toString();
-					if(line.contains("url")){
-						end=true;
-					}
-				}
-				sc.close();
-				line = line.substring(line.indexOf(":")+2,line.length()-1);
-				try {
-					Desktop.getDesktop().browse(new URI(line));
-				} catch (IOException e) {
-					Dialogues.erreur(e).showAndWait();
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
-					Dialogues.erreur(e).showAndWait();
-					e.printStackTrace();
-				}
-
-			} catch (FileNotFoundException e) {
-				Dialogues.erreur(e).showAndWait();
-				e.printStackTrace();
-			}
-		}*/
 		
 	}
 }

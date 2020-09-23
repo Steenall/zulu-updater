@@ -14,6 +14,5 @@ public class Controleur {
 	public void update(Zulu current) {
 		Zulu latest= checker.getLatest(current);
 		checker.downloadZulu(latest, current);
-		//checker.downloadZulu();
 	}
 }

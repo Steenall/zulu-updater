@@ -17,7 +17,6 @@ public class Main extends Application {
 	    stage.setHeight(400);
 	    stage.setTitle("Zulu updater");
 	    stage.show();
-		
 	}
 
 }

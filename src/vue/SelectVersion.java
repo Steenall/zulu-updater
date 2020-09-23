@@ -90,20 +90,4 @@ public class SelectVersion extends GridPane{
 		setHgap(10.0);
 		setVgap(10.0);
 	}
-	/*private String getURL() {
-		String[] type = choixJDK.getValue().split(" ");
-		String res = url+"?"+type[0].toLowerCase()+"_version="+choixVersion.getValue().split(" ")[0];
-		res+="&os="+choixOs.getValue().toLowerCase();
-		if(choixArchitecture.getValue().contains(architecture[0])) {
-			String arch[] = choixArchitecture.getValue().split("_");
-			res+="&arch="+arch[0]+"&hw_bitness="+arch[1];
-		}else {
-			String arch = choixArchitecture.getValue().substring(3,choixArchitecture.getValue().length());
-			res+="&arch=arm&hw_bitness="+arch;
-		}
-		if(type[1]!=null)
-			res+="&features=fx";
-		return res;
-		return null;
-	}*/
 }
