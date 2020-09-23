@@ -1,22 +1,40 @@
 package vue;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
+import java.io.IOException;
+
+import controleur.Controleur;
+import controleur.EcouteurMenus;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Font; 
 
 public class Panneau extends BorderPane{
+	private MenuBar menus;
+	private EcouteurMenus ecouteurMenus;
+	private SelectVersion selectVersion;
+	private Controleur controleur;
+
 	public Panneau() {
-		Button verifier = new Button("Mettre à jour");
-		verifier.setMinSize(80, 40);
-		verifier.setFont(new Font(14));
-		verifier.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            	Dialogues.miseAJour();
-            }
-		});
-		setCenter(verifier);
+		controleur=new Controleur(this);
+		try {
+			FXMLLoader loader = new FXMLLoader(Panneau.class.getResource("menu.fxml"));
+			menus = loader.load();
+			setTop(menus);
+			ecouteurMenus = loader.getController();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		selectVersion = new SelectVersion(controleur);
+		setCenter(selectVersion);
+	}
+
+	public EcouteurMenus getEcouteurMenus() {
+		// TODO Auto-generated method stub
+		return ecouteurMenus;
+	}
+
+	public SelectVersion getSelectVersion() {
+		// TODO Auto-generated method stub
+		return selectVersion;
 	}
 }

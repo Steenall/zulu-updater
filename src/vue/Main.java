@@ -13,8 +13,8 @@ public class Main extends Application {
 		Panneau panneau = new Panneau();
 	    Scene scene = new Scene(panneau);
 	    stage.setScene(scene);
-	    stage.setWidth(300);
-	    stage.setHeight(200);
+	    stage.setWidth(600);
+	    stage.setHeight(400);
 	    stage.setTitle("Zulu updater");
 	    stage.show();
 		

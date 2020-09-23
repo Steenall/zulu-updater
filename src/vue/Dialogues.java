@@ -10,6 +10,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import zulu.Checker;
+import zulu.Zulu;
 
 public class Dialogues {
 	public static Alert upToDate() {
@@ -18,30 +19,22 @@ public class Dialogues {
 		alert.setContentText("Votre version est déjà à jour");
 		return alert;
 	}
-	public static Alert newVersion() {
+	public static boolean newVersion() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Nouvelle version disponible");
 		alert.setContentText("Voulez vous télécharger la nouvelle version ?");
-		return alert;
+		alert.showAndWait();
+		return alert.getResult().equals(ButtonType.OK);
 	}
-	public static void miseAJour() {
+	public static Zulu loadConfig() {
 		FileChooser fileChooser = new FileChooser();
 	    fileChooser.setTitle("Ouvrir un fichier de version");
 	    fileChooser.getExtensionFilters().addAll(
 	    		new ExtensionFilter("Fichier release","release"),
 	    		new ExtensionFilter("Tous les fichiers","*"));
 		Checker check = new Checker();
-		int current = check.getCurrentVersion(fileChooser.showOpenDialog(null));
-		int latest = check.getLatest();
-		if(current!=latest) {
-			if(Dialogues.newVersion().showAndWait().get().equals(ButtonType.YES))
-				check.downloadZulu();
-			System.exit(0);
-		}
-		else {
-			Dialogues.upToDate().showAndWait();
-			System.exit(0);
-		}
+		Zulu current = check.getCurrentVersion(fileChooser.showOpenDialog(null));
+		return current;
 	}
 	public static Alert erreur(Exception exception) {
 		Alert alert = new Alert(AlertType.ERROR);
@@ -60,6 +53,13 @@ public class Dialogues {
 			alert.setTitle("Erreur inconnu");
 			alert.setContentText("Une erreur inconnu c'est produite");
 		}
+		return alert;
+	}
+	public static Alert aPropos() {
+		// TODO Auto-generated method stub
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("A propos");
+		alert.setContentText("Cette application a été écrite en java avec la bibliothèque javaFX et l'api d'Azul");
 		return alert;
 	}
 }
