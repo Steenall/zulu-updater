@@ -52,7 +52,7 @@ public enum Architecture {
 		}
 	},
 	arm32 {
-		private final String[] nomPotentiel = {"arm"};
+		private final String[] nomPotentiel = {"aarch32"};
 		@Override
 		public String getNom() {
 			// TODO Auto-generated method stub
