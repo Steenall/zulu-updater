@@ -81,19 +81,18 @@ public class Zulu {
 		return javaPackage;
 	}
 	private String getURLExtension() {
-		String jPackage;
-		if(javaPackage.estJDK())jPackage="jdk";
-		else jPackage="jre";
 		String fx="";
+		String jre="";
+		if(!javaPackage.estJDK())jre="&bundle_type=jre";
 		if(javaPackage.possedeFX())fx="&features=fx";
-		return "?"+jPackage+"_version="+javaVersion.getVersion()+"&os="+os.getNom().toLowerCase()+"&arch="+architecture.getArch()+"&hw_bitness="+architecture.getBitness()+fx;
+		return "?jdk_version="+javaVersion.getVersion()+"&os="+os.getNom().toLowerCase()+"&arch="+architecture.getArch()+"&hw_bitness="+architecture.getBitness()+fx+jre;
 	}
 	public String getDownloadURL() {
 		// TODO Auto-generated method stub
 		return url+binary+getURLExtension();
 	}
 	public String getURL() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method
 		return url+getURLExtension();
 	}
 	@Override

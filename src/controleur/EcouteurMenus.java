@@ -5,14 +5,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import vue.Dialogues;
-import zulu.Checker;
-import zulu.Zulu;
 
 public class EcouteurMenus {
-	private Controleur controleur;
-	public void setControleur(Controleur controleur) {
+	//private Controleur controleur;
+	/*public void setControleur(Controleur controleur) {
 		this.controleur=controleur;
-	}
+	}*/
 	public void onSave(ActionEvent actionEvent) {
 		File releaseFile = Dialogues.getReleaseFile();
 		File link = new File("link.conf");
@@ -24,7 +22,6 @@ public class EcouteurMenus {
 			fop.write(contentInBytes);
 			fop.flush();
 			fop.close();
-
 		} catch (IOException e) {
 			Dialogues.erreur(e);
 			e.printStackTrace();

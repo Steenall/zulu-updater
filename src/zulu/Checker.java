@@ -15,6 +15,10 @@ import java.util.Scanner;
 import vue.Dialogues;
 
 public class Checker {
+	
+	private static final String useJDK ="jdk_version";
+	private static final String useZulu ="zulu_version";
+	
 	public Checker() {
 		
 	}
@@ -31,7 +35,7 @@ public class Checker {
 			String line;
 			while(sc.hasNextLine()) {
 				 line = sc.nextLine();
-				if(line.contains("JAVA_VERSION")) {
+				if(line.contains("JAVA_VERSION=")) {
 					line =line.substring(line.indexOf("\"")+1, line.length()-1);
 					if(!line.contains(".")) {
 						current.setJavaVersion(Integer.parseInt(line));
@@ -43,18 +47,18 @@ public class Checker {
 							current.setJavaVersion(Integer.parseInt(line.substring(0,line.indexOf("."))));
 						}
 					}
-				}else if(line.contains("OS_NAME")) {
+				}else if(line.contains("OS_NAME=")) {
 					current.setOs(line.substring(line.indexOf("\"")+1,line.length()-1));
-				}else if(line.contains("OS_ARCH")) {
+				}else if(line.contains("OS_ARCH=")) {
 					current.setArchitecture(line.substring(line.indexOf("\"")+1,line.length()-1));
-				}else if(line.contains("IMPLEMENTOR_VERSION")) {
-					current.setBuildId(line.substring(line.indexOf(".")+1, line.indexOf("-")-1));
+				}else if(line.contains("IMPLEMENTOR_VERSION=")) {
+					current.setBuildId(line.substring(line.indexOf(".")+1, line.indexOf("-")));
 				}
 			}
 			sc.close();
 			FilenameFilter isJDK = new FilenameFilter(){
 				public boolean accept(File dir, String name) {
-					return name.equals("jre");
+					return name.equals("jmods")||name.equals("jre");
 				}
 			};
 			FilenameFilter isFX = new FilenameFilter(){
@@ -64,8 +68,8 @@ public class Checker {
 			};
 			boolean jdk=false;
 			boolean fx=false;
-			if(fichier.getParentFile().list(isJDK)!=null)jdk=true;
-			if(fichier.getParentFile().list(isFX)!=null)fx=true;
+			if(fichier.getParentFile().list(isJDK).length>0)jdk=true;
+			if(fichier.getParentFile().list(isFX).length>0)fx=true;
 			if(jdk) {
 				if(fx)
 					current.setJavaPackage(JavaPackage.JDK_FX);
@@ -84,6 +88,7 @@ public class Checker {
 		} catch(NullPointerException e) {
 			
 		}
+		System.out.println(current.toString());
 		return current;
 	}
 	public Zulu getLatest(Zulu current) {
@@ -109,14 +114,21 @@ public class Checker {
 		}
 		sc.useDelimiter(",");
 		boolean end=false;
+		String tempSearch;
+		if(current.getJavaVersion().equals(JavaVersion.java_8))tempSearch=useJDK;
+		else tempSearch=useZulu;
         while(!end){
         	String line = sc.next().toLowerCase().toString();
-        	if(line.contains("jdk_version")){
+        	if(line.contains(tempSearch)){
         		end=true;
-        		sc.next();
         	}
         }
-        latest.setBuildId(sc.next());
+        if(current.getJavaVersion().equals(JavaVersion.java_8)) {
+        	sc.next();
+            latest.setBuildId(sc.next());
+        }else {
+            latest.setBuildId(sc.next()+"+"+sc.next().replace("]", ""));
+        }
         sc.close();
         return latest;
 	}

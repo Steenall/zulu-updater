@@ -1,14 +1,13 @@
 package controleur;
 
-import vue.Panneau;
 import zulu.Checker;
 import zulu.Zulu;
 
 public class Controleur {
-	private Panneau panneau;
+	//private Panneau panneau;
 	private Checker checker;
-	public Controleur(Panneau panneau) {
-		this.panneau=panneau;
+	public Controleur(/*Panneau panneau*/) {
+		//this.panneau=panneau;
 		checker = new Checker();
 	}
 	public void update(Zulu current) {
