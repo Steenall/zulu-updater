@@ -1,5 +1,7 @@
 package vue;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import controleur.Controleur;
@@ -52,7 +54,15 @@ public class SelectVersion extends GridPane{
 			current.setOs(choixOs.getValue());
 			current.setBuildId(version);
 			current.setJavaVersion(Integer.parseInt(choixVersion.getValue().substring(0, choixVersion.getValue().indexOf(" "))));
-			controleur.update(current);
+			try {
+				controleur.update(current);
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+				Dialogues.erreur(e1).showAndWait();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				Dialogues.erreur(e1).showAndWait();
+			}
 		});
 		choixJDK.setValue(JavaPackage.JDK_FX);
 		choixVersion.setValue(listVersion.get(0));

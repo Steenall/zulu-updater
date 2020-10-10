@@ -1,10 +1,8 @@
 package zulu;
 
 import java.awt.Desktop;
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URI;
@@ -12,12 +10,16 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Scanner;
 
+import controleur.download.Download;
+import controleur.download.DownloadObserver;
 import vue.Dialogues;
 
-public class Checker {
+public class Checker extends DownloadObserver{
 	
 	private static final String useJDK ="jdk_version";
 	private static final String useZulu ="zulu_version";
+	
+	private static final String fileNameVersion ="version.json";
 	
 	public Checker() {
 		
@@ -91,27 +93,18 @@ public class Checker {
 		System.out.println(current.toString());
 		return current;
 	}
-	public Zulu getLatest(Zulu current) {
+	public Zulu getLatest(Zulu current) throws IOException {
 		Zulu latest=current.clone();
-		try (BufferedInputStream in = new BufferedInputStream(new URL(current.getURL()).openStream());
-				FileOutputStream fileOutputStream = new FileOutputStream("version.json")) {
-				byte dataBuffer[] = new byte[1024];
-			    int bytesRead;
-			    while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-			    	fileOutputStream.write(dataBuffer, 0, bytesRead);
-			    }
-				} catch (IOException e) {
-					Dialogues.erreur(e).showAndWait();
-					e.printStackTrace();
-				}
-		Scanner sc=null;
-		File zuluAPI=new File("version.json");
-		try {
-			sc = new Scanner(zuluAPI);
-		} catch (FileNotFoundException e) {
-			Dialogues.erreur(e).showAndWait();
-			e.printStackTrace();
+		Download.createDownload(new URL(latest.getURL()), this, fileNameVersion);
+		synchronized (getObj()){
+			try {
+				getObj().wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
+		File zuluAPI = new File(fileNameVersion);
+		Scanner sc = new Scanner(zuluAPI);
 		sc.useDelimiter(",");
 		boolean end=false;
 		String tempSearch;
@@ -151,5 +144,34 @@ public class Checker {
 			}
 		}
 		
+	}
+	public void downloadZuluConsole(Zulu latest, Zulu current) {
+		if(latest.getBuildId().equals(current.getBuildId())) {
+			System.out.println("Votre version actuelle est à jour");
+			System.exit(0);
+		}else {
+			System.out.println("Une mise à jour est disponbile, voulez-vous la télécharger ?");
+			System.out.println("Y : Oui, N : Non");
+			Scanner sc = new Scanner(System.in);
+			String reponse;
+			boolean err=false;
+			do {
+				if(err)
+					System.out.println("Veuillez rentrez Y ou N");
+				reponse=sc.nextLine();
+				err=true;
+			}while(!reponse.equals("y")||!reponse.equals("Y")||!reponse.equals("n")||!reponse.equals("N"));
+			sc.close();
+			if(reponse.equals("y")||reponse.equals("Y")) {
+				try {
+					Desktop.getDesktop().browse(new URI(latest.getDownloadURL()));
+					System.exit(0);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }
